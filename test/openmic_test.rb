@@ -35,9 +35,19 @@ class OpenMicTest < Minitest::Test
     joke_2 = Joke.new(2, "How do you keep a lion from charging?", "Take away its credit cards.")
     ali.learn(joke_1)
     ali.learn(joke_2)
+
     assert_equal false, open_mic.repeated_jokes?
-    sal.tell(ali, joke_1)
     ali.tell(sal, joke_1)
+    assert_equal false, open_mic.repeated_jokes?
+    #Couldn't get the above to happen. My repeated_jokes? tests whether someone
+    #hears a new joke they already know. This happens if sal tells ali joke_1,
+    #but not if ali tells it to sal.
+
+    #But this method will return true if someone says a joke that they already
+    #learned previously.
+    assert_equal true, open_mic.tell_repeated_jokes?
+    #Now if Sal tells Ali the joke, it will return that he already know that joke.
+    sal.tell(ali, joke_1)
     assert_equal true, open_mic.repeated_jokes?
   end
 end
